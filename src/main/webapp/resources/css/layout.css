@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #E0F2F1; /* 부드러운 청록색 */
+            color: #333333; /* 어두운 텍스트 색상 */
+        }
+
+
+
+section {
+	margin-left: 17%;
+	margin-right: 17%;
+	background-color:lightgreen;
+	
+}
+
+footer {
+	margin-left:15%;
+	margin-right: 15%;
+	padding:20px;
+	background:#ccc;
+	
+}
