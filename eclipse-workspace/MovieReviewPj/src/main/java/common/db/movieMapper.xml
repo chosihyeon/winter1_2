@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="kr.ac.kopo.dao.MovieDAO">
+  	<sql id="Movieboard">
+		select movie_title, 
+			movie_poster, 
+			movie_runtime, 
+			movie_platform,
+			release_date, 
+			rating_avg 
+		from movies
+  	</sql>
+  	
+  	<select id="movieSelectAll" resultType="movieVO">
+  		<include refid ="Movieboard"/>
+  	</select>
+  	
+  	<select id="movieSelectOne" parameterType="java.lang.String" resultType="movieVO">
+  		select movie_title, 
+			movie_poster, 
+			movie_runtime, 
+			movie_platform,
+			release_date, 
+			rating_avg 
+		from movies
+  		where movie_title=#{movie_title}
+  	</select>
+  	
+  </mapper>

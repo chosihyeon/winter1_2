@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.kopo.dao.CommentDAO">
+
+<!--중복 될때 쓰는 전체 board가 있는 코드임 -->
+<sql id="selectBoard">
+	select comment_no, user_id, movie_title, reply, rating,
+	parent_comment_id, comment_create_date, comment_update_date
+	,comment_delete
+	from Comments
+</sql>
+
+<!-- update delete 
+	파라미터 타입이 있음 3번, title은 다 지울꺼야.
+/ result타입은 없다. result는 select할때 씀
+
+//두 명령어는 데이터를 조작할 뿐, 
+//별도로 반환되는 결과 집합이 없습니다.행만 영향을 받음 
+
+-->
+
+<!-- 전체코멘트 조회 -->
+<select id="selectAll" resultType="commentVO">
+	select comment_no, user_id, movie_title, reply, rating,
+	parent_comment_id, comment_create_date, comment_update_date
+	,comment_delete
+	from Comments
+	order by comment_create_date desc
+</select>
+	
+<!-- 코멘트 삽입 sql-->
+<!-- 파라미터는 ObJect나 map 형태로  -->
+<!--# prepared statement 객체  $ORDER BY,테이블/컬럼 이름 
+동적 정의 따음표를 직접 작성 문자열 그대로 SQL 삽입  -->
+<insert id ="insert" parameterType="commentVO">
+	insert into Comments(comment_no, user_id, movie_title, reply)
+	values (seq_comment_no.nextval, #{user_id}, #{movie_title}, #{reply})
+</insert>
+
+
+<!-- 하나로 찾는거 -->
+<!-- 여기서 나와야하는 정보는 comment_no, user_id, movietitle, reply 잉 다 나와되네 -->
+<select id="selectByNo" resultType="commentVO" parameterType = "int">
+select comment_no, user_id, movie_title, reply,
+	rating,parent_comment_id,comment_create_date, comment_update_date
+	,comment_delete
+from comments
+where comment_no = #{no}
+</select>
+
+<select id="selectByNo2" resultType="commentVO" parameterType = "commentVO">
+	<include refid="selectBoard"/>
+where comment_no = #{3}
+</select>
+
+<!-- type은 kr.ac.kopo= commentVO임 날라오는 result타입에서 
+column이  set으로 MAPING되게 만들고 싶다.maping되는 SETTER는 
+REGDATE야 즉 파라미터와 column명이 다를때 작성 PROPERTY가 setter를 말함 -->
+<!--resultMap type="commentVO" id="commentMap"> </resultMap>-->
+
+<!-- comment에 movie_title이 센과치히로의 행방불명/ 
+센과 치히로의 행방불명, 센 과 치 히 로 띄어쓰기와는 상관없이 -->
+
+<select id="selectWhere" parameterType="commentVO" resultType="commentVO">
+	
+	<include refid="selectBoard" />
+	REPLACE(NVL(movie_title, ''), ' ', '') LIKE '%' || REPLACE(#{movie_title}, ' ', '') || '%'
+</select>
+
+
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
